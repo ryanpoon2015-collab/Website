@@ -15,58 +15,15 @@ from classes.Arduino import Arduino # Arduino communication class
 from templates.app_wrapper import * # Import Flask app and socketio
 
 load_dotenv()
-FAKE_CONTEC = os.getenv("FAKE_CONTEC") in ["True", "true", "1"] # Whether to use fake data for Contec device
-FAKE_TEMPERATURE = os.getenv("FAKE_TEMPERATURE") in ["True", "true", "1"] # Whether to use fake temperature data
-FAKE_BP = os.getenv("FAKE_BP") in ["True", "true", "1"] # Whether to use fake blood pressure data
-FAKE_FINGERPRINT = os.getenv("FAKE_FINGERPRINT") in ["True", "true", "1"] # Whether to use fake fingerprint data
-contec_device = Contec_CMS60D(FAKE_CONTEC) # Initialize Contec device
+load_dotenv()
+firebase = Firebase(
+    "credentials.json",
+    use_firestore=True,  # Enable Firestore
+    use_storage=True,  # Enable Storage
+    storage_bucket="bp-ai-web.firebasestorage.app",  # Specify storage bucket
+)
+contec_device = Contec_CMS60D() # Initialize Contec device
 arduino = Arduino(os.getenv("ARDUINO_PORT", "COM5")) # Initialize Arduino on configured port
-
-class MockFirebase:
-    def __init__(self, *args, **kwargs):
-        print("[MockFirebase] Initialized")
-        
-    def upload_storage(self, file_path, destination_blob_name, make_public=True):
-        print(f"[MockFirebase] Uploading {file_path} to {destination_blob_name}")
-        return f"http://mock-storage-url/{destination_blob_name}"
-
-    def write_firestore(self, doc_path, data):
-        print(f"[MockFirebase] Writing to {doc_path}: {data}")
-
-    def update_firestore(self, doc_path, data):
-         print(f"[MockFirebase] Updating {doc_path}: {data}")
-
-class MockYaGmail:
-    def __init__(self, sender, password, receiver, subject, content):
-        print(f"[MockYaGmail] Sending email to {receiver} | Subject: {subject}")
-        print(f"[MockYaGmail] Content: {content}")
-
-
-class MockPDFGen:
-    def __init__(self, prompt, pdf_filename, page_size="A4"):
-        print(f"[MockPDFGen] Generating dummy PDF for: {prompt[:50]}...")
-        # Create a dummy file so file operations don't fail if they check for existence
-        with open(pdf_filename, "w") as f:
-            f.write("Dummy PDF Content")
-
-if os.path.exists("credentials.json"):
-    firebase = Firebase(
-        "credentials.json",
-        use_firestore=True,  # Enable Firestore
-        use_storage=True,  # Enable Storage
-        storage_bucket="bp-ai-web.firebasestorage.app",  # Specify storage bucket
-    )
-else:
-    print("WARNING: credentials.json not found. Using Mock Firebase.")
-    firebase = MockFirebase()
-    
-    # Also mock PDFGen if we are in this "mock mode"
-    print("WARNING: Using Mock PDFGen.")
-    PDFGen = MockPDFGen
-
-if not os.getenv("EMAIL_PASSWORD"):
-     print("WARNING: No Email Password found. Using Mock YaGmail.")
-     YaGmail = MockYaGmail
 
 
 
@@ -102,22 +59,7 @@ class LogDevice(BaseModel): # Define LogDevice data model
 
 print("1")
 
-class MockBP_Picture:
-    def __init__(self, *args, **kwargs):
-        print("[MockBP_Picture] Initialized")
-    def read(self):
-        print("[MockBP_Picture] Reading dummy BP")
-        return random.randint(110, 130), random.randint(70, 90)
-
-if os.path.exists("credentials.json") and not (os.getenv("FAKE_BP") in ["True", "true", "1"]):
-    try:
-        bp_picture = BP_Picture()
-    except SystemExit:
-        print("WARNING: Camera not found. Using Mock BP_Picture.")
-        bp_picture = MockBP_Picture()
-else:
-    print("WARNING: Simulation mode or missing credentials. Using Mock BP_Picture.")
-    bp_picture = MockBP_Picture()
+bp_picture = BP_Picture()
 
 print("2")
 
@@ -339,12 +281,8 @@ def chatgpt_full():
     return {"url": url, "id": storage_filename}
 
 
-#! MEASURE TEMPERATURE
 @RouteHelper.route("/measure_temperature", methods=["GET"])
 def measure_temperature():
-    if FAKE_TEMPERATURE:
-        time.sleep(0.5)
-        return round(random.uniform(36.1, 39.0), 1)
 
     arduino.println("1")
     start = time.time()
@@ -363,30 +301,24 @@ def measure_temperature():
     return round(temperature, 1)
 
 
-#! START CONTEC:
 @RouteHelper.route("/contec_start", methods=["GET"])
 def contec_start():
-    contec_device = Contec_CMS60D(FAKE_CONTEC)
+    contec_device = Contec_CMS60D()
     contec_device.start()
     return "Contec device started."
 
 
-#! READ CONTEC:
 @RouteHelper.route("/contec_read", methods=["GET"])
 def contec_read():
-    contec_device = Contec_CMS60D(FAKE_CONTEC)
+    contec_device = Contec_CMS60D()
     data = contec_device.read()
     if data:
         return {"pulse_rate": data[0], "spo2": data[1]}
     raise ValueError("No valid data available")
 
 
-#! START BP:
 @RouteHelper.route("/bp_start", methods=["GET"])
 def bp_start():
-    if FAKE_BP:
-        time.sleep(0.5)
-        return "BP device started."
 
     # TODO: Enable BP via Arduino
     arduino.println("2")
@@ -405,12 +337,8 @@ def bp_start():
     raise ValueError("Didn't receive valid reply of 1 from Arduino")
 
 
-#! STOP BP:
 @RouteHelper.route("/bp_stop", methods=["GET"])
 def bp_stop():
-    if FAKE_BP:
-        time.sleep(0.5)
-        return "BP device stopped."
 
     arduino.println("3")
     time.sleep(1)
@@ -441,12 +369,8 @@ def bp_stop():
 #     return 0, 0
 
 
-#! READ BP:
 @RouteHelper.route("/bp_read", methods=["GET"])
 def bp_read():
-    if FAKE_BP:
-        time.sleep(0.5)
-        return {"bp_sys": random.randint(110, 130), "bp_dia": random.randint(70, 90)}
 
     # arduino.println("3")
     # time.sleep(1)
@@ -466,12 +390,8 @@ def bp_read():
     return {"bp_sys": sys, "bp_dia": dia}
 
 
-#! READ FINGERPRINT:
 @RouteHelper.route("/fingerprint_read", methods=["GET"])
 def fingerprint_read():
-    if FAKE_FINGERPRINT:
-        time.sleep(2.5)
-        return True
 
     arduino.println("4")
     time.sleep(1)

@@ -5,8 +5,7 @@ from collections import deque
 
 class Contec_CMS60D:
 
-    def __init__(self, FAKE_CONTEC: bool) -> None:
-        self.FAKE_CONTEC = FAKE_CONTEC
+    def __init__(self) -> None:
         self.SEQ = [
             "80",  # 1) kick
             "81 01",  # 2)
@@ -25,8 +24,8 @@ class Contec_CMS60D:
         self.dev = None
         self.buf = deque()
         self.myData = MyData()
-        if not self.FAKE_CONTEC:
-            self._open_iface()
+        self.myData = MyData()
+        self._open_iface()
 
     def _hex2list(self, s):
         return [int(x, 16) for x in s.split()] if s else []
@@ -59,9 +58,6 @@ class Contec_CMS60D:
         self.dev, self.out_report, self.rid, self.n = self._find_iface()
 
     def _send_out(self, report, rid, n, payload_hex):
-        if self.FAKE_CONTEC:
-            return
-
         self._open_iface()
         pkt = [0] * n
         pkt[0] = rid  # report id (0 on your device)
@@ -102,9 +98,6 @@ class Contec_CMS60D:
         self.flush()
         print("bbb")
 
-        if self.FAKE_CONTEC:
-            return
-
         self._open_iface()
 
         for h in self.SEQ:
@@ -117,35 +110,25 @@ class Contec_CMS60D:
             return None
 
         print("222")
-        if self.FAKE_CONTEC:
-            self.myData.load()
-            self.myData.save(
-                pulse_rate=self.myData.data.pulse_rate + 1,
-                spo2=self.myData.data.spo2 + 1,
-            )
-        else:
-            self._open_iface()
+        self._open_iface()
 
-            if self.dev is None:
-                raise RuntimeError("Device not initialized")
+        if self.dev is None:
+            raise RuntimeError("Device not initialized")
 
-            self.dev.set_raw_data_handler(self._on_data)
-            print("333")
-            self._send_out(self.out_report, self.rid, self.n, self.HEARTBEAT)
-            print("444")
-            time.sleep(0.5)
+        self.dev.set_raw_data_handler(self._on_data)
+        print("333")
+        self._send_out(self.out_report, self.rid, self.n, self.HEARTBEAT)
+        print("444")
+        time.sleep(0.5)
 
         pr = self.myData.data.pulse_rate
         print("555")
         spo2 = self.myData.data.spo2
         print("666")
-        if (self.FAKE_CONTEC and pr > 3) or (
-            not self.FAKE_CONTEC and pr > 0 and spo2 > 0
-        ):
+        if pr > 0 and spo2 > 0:
             self.myData.save(pulse_rate=0, spo2=0, reading_contec=False)
             # self.close()
             return pr, spo2
 
     # def close(self):
-    #     if not self.FAKE_CONTEC:
-    #         self.dev.close()
+    #     self.dev.close()

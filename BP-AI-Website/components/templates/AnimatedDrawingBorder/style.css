@@ -1,0 +1,31 @@
+/*! BORDER ANIMATION  */
+.anim-border-svg-wrapper {
+  position: relative;
+	margin: 0 auto;
+  cursor: pointer;
+  user-select: none;
+  width: fit-content;
+}
+
+.anim-border-svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.anim-border-shape {
+  fill: transparent;
+  stroke: rgb(59, 59, 59);
+
+}
+.anim-border-text {
+  font-family: 'Roboto Condensed';
+  font-size: 1.2rem;
+  line-height: 32px;
+  letter-spacing: 2px;
+  color: rgb(59, 59, 59);
+
+  text-align: center;
+}
+.anim-border-svg-wrapper:hover .anim-border-shape {
+}

@@ -1,0 +1,27 @@
+{
+"python.defaultInterpreterPath": "${workspaceFolder}\\.venv\\Scripts\\activate.bat",
+"window.zoomLevel": -2,
+"python.analysis.diagnosticSeverityOverrides": {
+    "reportUnusedFunction": "none"
+},
+"workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#402757",
+    "activityBar.background": "#402757",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#84613b",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#402757",
+    "statusBar.background": "#261734",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#402757",
+    "statusBarItem.remoteBackground": "#261734",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#261734",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#26173499",
+    "titleBar.inactiveForeground": "#e7e7e799"
+},
+"peacock.color": "#261734FF"
+}

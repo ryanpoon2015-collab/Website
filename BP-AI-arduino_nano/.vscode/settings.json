@@ -1,0 +1,94 @@
+{
+  "window.zoomLevel": -2,
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#203b85",
+    "activityBar.background": "#203b85",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#000000",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#203b85",
+    "statusBar.background": "#16295c",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#203b85",
+    "statusBarItem.remoteBackground": "#16295c",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#16295c",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#16295c99",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#16295CFF",
+  "cmake.ignoreCMakeListsMissing": true,
+  "files.associations": {
+    "initializer_list": "cpp",
+    "chrono": "cpp",
+    "string": "cpp",
+    "unordered_map": "cpp",
+    "optional": "cpp",
+    "random": "cpp",
+    "fstream": "cpp",
+    "functional": "cpp",
+    "istream": "cpp",
+    "ostream": "cpp",
+    "ratio": "cpp",
+    "streambuf": "cpp",
+    "regex": "cpp",
+    "type_traits": "cpp",
+    "tuple": "cpp",
+    "utility": "cpp",
+    "system_error": "cpp",
+    "array": "cpp"
+  },
+
+  "better-comments.tags": [
+    {
+      "tag": "!",
+      "color": "#FF2D00",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "?",
+      "color": "#3498DB",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "//",
+      "color": "#474747",
+      "strikethrough": true,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "todo",
+      "color": "#FF8C00",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "*",
+      "color": "#F6F100FF",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    }
+  ],
+  "platformio-ide.autoOpenPlatformIOIniFile": false,
+  "platformio-ide.disablePIOHomeStartup": true
+}

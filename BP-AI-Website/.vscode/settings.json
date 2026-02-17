@@ -1,0 +1,44 @@
+//To customize editor's behavior, terminal setup, python environmetn
+{
+    "terminal.integrated.profiles.windows": { //List the available terminal profiles
+        "Command Prompt (with venv)": { //The profile defined
+            "path": "C:\\Windows\\System32\\cmd.exe", //the executable shell will be on command prompt
+            "args": ["/k", "${workspaceFolder}\\utils\\venv\\Scripts\\activate.bat"]
+        }
+    //Overall this instructs vs code to open command prompt and activate the python virtual environment located in the utils/venv folder when opening a new terminal
+
+    // This setup is useful for developers who want to work within a specific Python virtual environment directly from the VS Code terminal. 
+
+    },
+    "window.zoomLevel": -2, //Sets the zoom level of the editor window to -2, making everything appear smaller
+    "python.defaultInterpreterPath": "${workspaceFolder}\\utils\\venv\\Scripts\\activate.bat",
+    "terminal.integrated.defaultProfile.windows": "Command Prompt (with venv)", //Sets the default terminal profile to the one defined above
+
+    // Tailwind CSS configuration to recognize class names in various formats
+    "tailwindCSS.experimental.classRegex": [
+        ["[cC]lassName[a-zA-Z0-9]*\\s*=\\s*\"([^\"]*)\""],
+        ["[cC]lassName[a-zA-Z0-9]*\\s*=\\s*'([^']*)'"],
+        ["[cC]lassName[a-zA-Z0-9]*\\s*=\\s*\\`([^\\`]*)\\`"],
+    ],
+    "peacock.color": "#5E475BFF", //Sets the workspace color to a specific shade of purple
+    // Custom color settings for various UI elements in VS Code
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#7b5d77",
+        "activityBar.background": "#7b5d77",
+        "activityBar.foreground": "#e7e7e7",
+        "activityBar.inactiveForeground": "#e7e7e799",
+        "activityBarBadge.background": "#98a738",
+        "activityBarBadge.foreground": "#15202b",
+        "commandCenter.border": "#e7e7e799",
+        "sash.hoverBorder": "#7b5d77",
+        "statusBar.background": "#5e475b",
+        "statusBar.foreground": "#e7e7e7",
+        "statusBarItem.hoverBackground": "#7b5d77",
+        "statusBarItem.remoteBackground": "#5e475b",
+        "statusBarItem.remoteForeground": "#e7e7e7",
+        "titleBar.activeBackground": "#5e475b",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveBackground": "#5e475b99",
+        "titleBar.inactiveForeground": "#e7e7e799"
+    }
+}

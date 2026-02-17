@@ -1,0 +1,14 @@
+
+---> AUTOSTART WINDOWS - WEBSITE
+@echo off
+cd /d "C:\Users\USER\Desktop\website"
+start npm run dev
+timeout /t 5 /nobreak >nul
+start chrome --start-fullscreen http://localhost:3000
+
+
+---> AUTOSTART WINDOWS - PYTHON
+@echo off
+cd /d "C:\Users\USER\Desktop\server"
+call "venv\Scripts\activate.bat"
+python arduino.py

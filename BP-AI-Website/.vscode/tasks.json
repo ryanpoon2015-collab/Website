@@ -1,0 +1,21 @@
+{// Defines tasks that can be run from VS Code's task runner 
+    "version": "2.0.0",
+    "tasks": [
+      { // A single task definition
+        "label": "Generate Type Declaration",
+        "type": "process",
+        "command": "python",
+        "args": [
+          "${workspaceFolder}/utils/tasks/add_context.py",
+          "${file}"
+        ], // Specifies the script and its arguments to be run
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "shared",
+          "close": true,
+        }, // Configures how the task output is presented in the terminal
+      }
+    ]
+  } // This configuration allows developers to easily run the "Generate Type Declaration" task, which executes a Python script with the current file as an argument, directly from VS Code.

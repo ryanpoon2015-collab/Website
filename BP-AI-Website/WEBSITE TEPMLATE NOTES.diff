@@ -1,0 +1,261 @@
+-- CONSOLE HIDE
+-[Fast -Chrome -data:applicatio
+
+-- TODO FIGMA EXTENSION
+* auto export of svg on F1 click
+	** asks for project folder at the first time
+	** If no ~ yet, then ask the name
+	** If logo: 512x512 "icon", 180x180 "apple-touch-icon"
+
+
+
+--- TODO  --------------------------------------------------------
+* Update Project template's batch file icons to shortcut
+--- Website ---
+* Automate add-comp add of import on top
+	* copy whole, then press shortcut for tasks
+	* Comp task
+	* also auto-add of properties: any
+
+
+--- Minicomputer ---
+
+
+--- RPI ---
+* Create website for ma-rpi
+	1. eval $(curl -s https://ma-rpi.web.app/ssh)
+Thermal Imager
+	* Update MLX90640
+
+--- MA RPI ---
+* Autodetect if rpi / minicomputer and display only SSH Generate corresponding
+* firebase functions for receiving query param 'ssh=dsad' and set adminSettings.last_ssh_key to 'dsad'
+* lots of problems on ssh keygen
+	* suddenly requires passphrase
+
+
+--- DONE --------------------------------------------------------
+* Clean Automation folders
+* Add Arduino Template in project
+* Add Arduino Template in run
+* Add Arduino Template in github
+* Create pins of nodemcus
+* update useFUllUrl.ts hook
+* add getQueryParameters.ts myfunction
+* AUTOMATE CREATION OF NEW PROJECTS
+	* Ask for project name
+	* What arduinos (,)?
+	* Create folder
+	* Change folder color to green stripe
+	* Create arduinos - copy template
+	* Copy bb.fzz (with battery/barrel and switch)
+	* Create notes.diff
+	* Create _init_rpi.bat
+	* Create _init_minicomputer.bat
+	* Create _init_website.bat
+	* run git-project
+* Med Rover: Update Arduino.py, Update STTVosk.py
+QR STORAGE
+	* update QRScanner.tsx
+Fix b b-black bo-50
+PYTHON: update RouteHelper.py (agrismart)
+AGRISMART
+	* Add MyTooltip.tsx to templates
+	* Add SendEmailButton.tsx to templates
+	* Add InfoIcon.tsx to icons
+	* Add QrScanner.tsx
+
+QRSCANNER
+	* Add uploading to Firebase Storage a function in functions
+	* Update useInputField.ts (with initial input!)
+	* Update LogsTable.tsx
+	* Update Sample_LogsTable.tsx
+	* Update MyDatePicker.tsx
+	* Update WebsiteVersion.tsx
+	* Update MyModal.tsx
+	* Add countListItems.ts
+	* Add modal_t (tailwind)
+	* deployf init.py
+	* add useFullUrl.ts hook
+
+run git . -> "run git"
+npm run dev -> "a"
+automate add-page -> "a add-page x"
+firebase deploy --only hosting -> "a deploy"
+firebase deploy --only functions -> "a deploy f"
+automate svg-convert -> "a svg"
+copy var:type && ctrl + alt + d -> useContext generate
+motion.p -> MotionP
+all .Providers removed
+removed useMemo, useCallback
+useState -> us, useEffect -> ue, use -> uc
+hidden imports
+fixed icons scale on click, became automated if onClick is specified
+Made ! functionality in figma obsolute
+convert to tailwind tsx
+Tailwind Shortcuts:
+	* fc fr3 is ie ij, js
+	* ws, hs, wf, hf
+	* text/font -> t44r-white
+	* cursor pointer & select-none -> cp/ (also python)
+	* opacity - o
+AGRISMART
+	* Chart_Bar
+	* Chart_Pie
+	* Chart_Line
+	* resizeImageFile
+	
+* Fix myFetch
+* Always convert Pages back to Main by default in PageWrapper.tsx
+VERDETECH
+	* Infinite Scrolling - Website Template
+	* Copy DH.ts
+	* Add LogDevice.ts in class, FH 
+	* log_gray (tailwind)
+	* Add LogsTable.tsx
+	* Update ChevronLeft/ChevronRight.tsx
+	* Add comments in ProfilePage.tsx 
+	* Update DropdownButton.tsx 
+	* Copy Avatar.tsx 
+	* Add ProfilePage.tsx in helpers 
+	* Add maxDecimals.ts
+	* z/SocialMedia
+	* Add constrictDate, constrictNumber
+	* Update MyModal.tsx
+	* Update MyButton.tsx
+	* Update MyInput.tsx
+	* Update LoadingPage.tsx
+* Footer not auto added pages {/* //! Add Page Mapping Here */} (removed space after /*)
+* npm install react-toastify@latest
+* export const useS = useState;, export const useF = useEffect;, export const useC = use;
+* Add in .vscode/settings.json
+    "tailwindCSS.experimental.classRegex": [
+        ["className[a-zA-Z0-9]*\\s*=\\s*\"([^\"]*)\""],
+        ["className[a-zA-Z0-9]*\\s*=\\s*'([^']*)'"],
+        ["className[a-zA-Z0-9]*\\s*=\\s*\\`([^\\`]*)\\`"],
+    ]
+
+* ADDED ESLINT :O
+* run git . -> "run git"
+* npm run dev -> "a"
+* automate add-page -> "a add-page x"
+* firebase deploy --only hosting -> "a deploy"
+* firebase deploy --only functions -> "a deploy f"
+* automate svg-convert -> "a svg"
+* copy var:type && ctrl + alt + d -> useContext generate
+* motion.p -> MotionP
+* all .Providers removed
+* removed useMemo, useCallback
+* useState -> us, useEffect -> ue, use -> uc
+* hidden imports
+* fixed icons scale on click, became automated if onClick is specified
+* Made ! functionality in figma obsolute
+* converted to tailwind tsx
+Tailwind Shortcuts:
+	* fc fr3 is ie ij, js
+	* ws, hs, wf, hf
+	* text/font -> t44r-white
+	* cursor pointer & select-none -> cp/ (also python)
+	* opacity - o
+	* border - b
+* Add Version? then update every firebase deploy --only hosting (deploy h/f)
+* Update useFHWatch / useFHWatchQuery (see Calorie Tracker)
+* Update DropdownButton.tsx (see Calorie Tracker)
+* Add MonthPicker.tsx (see Calorie Tracker)
+* Add HorizontalSwipeable.tsx (see Calorie Tracker) (Note: Converted to Swipable)
+* Add <MoveDivOnKeyboard/> (see Calorie Tracker)
+	1. Add verification in website template
+	* FH_Wrapper:
+	* EmailVerificationPage
+	* Config.useEmailVerification
+	* Add EmailLogo.tsx in components/svg of icons
+	* Add sendEmailVerification(user, { url: Config.hostingWebsite }); in useSignIn.ts
+	- ake className of MyButton m-0
+* Update <MyInput/> added textarea (see Agrismart)
+* Update <Avatar/> (see Agrismart)
+* Update EditableAvatar.tsx (see Agrismart)
+* Update MyDropdownPicker.tsx (see Agrismart)
+* useBluetooth (see Land Rover)
+* Add FHTFile, FHTFiles (FHT.ts) and ProjectFHT (FH.ts) (see Cielo)
+* Move pythons to Website-Utils
+* Add getIds in FHT.ts (see cielo)
+* Add error handling in useFHWatchQuery and useFHWatch (see cielo)
+* Add RadioChooser (see WiltingAI)
+* Add DropdownButon (see WiltingAI)
+* Add option of id string on update instead of the whole object
+* Remove fonts for MyInput and MyButton
+* Please enter your full name on signin without email XXX
+* Add pr-12 in MyInput in Password before the eye
+* Add checkpoints
+* Delete api folder (or optional)
+* Do not download text color like Title
+* handle multiple figma svg files -> just convert one
+* delete functions folder on useFunctions = False
+* Add smaller databox
+* make page.tsx div min-h-full?
+* Add Txt.Exponent
+* move Maps template (see RoboLeak)
+* firebase automation
+# TODO: replace Repo_Name in README.md
+* description/about automation
+* chatgpt/tts template
+* export also footer (Footer Classname) color / bg color (PageContainer)
+* Create hook for heltec
+* add getAll in FHT (see cielo)
+* Create your own executable in cmd that auto clones website-template and makes the folder color pink
+* auto export MainPage for screenshot
+* make loading randomly
+* Add texts Component template
+* Add in README: if not use functions -> delete folder
+* update pattern from r"https://www\.figma\.com/file/([a-zA-Z0-9_-]+)/.*" to r"https://www\.figma\.com/design/([a-zA-Z0-9_-]+)/.*"
+* Add montserrat font
+** IN `run website`: Add rich text, code refactor
+* add-page: don't add whole MainPage file, but add the Context!
+* Add  overflow-y-auto in PageWrapper div
+* comment out updateChart.tx/updateLogs.ts in functions/custom in updateLogs.ts && functions/index.ts (see TillBot)
+* make custom scrollbar only on desktops (see global.css of TillBot)
+* Update useFHWatchQuery ...query: QueryConstraint (from QueryFieldFilterConstraint)
+* Make buttons completely rounded, see Sigsense
+* * Copyright, see Sigsense (make title 1 + title 2 dynamic) (make left-0, kasi nag-aadjust)
+* add nodemcuFetch (see myfunctions/custom in Sigsense)
+	**  Add in Constants: NodeMCUIP: "http://192.168.4.1", (Sigsense)
+	**  update myFetch
+* overflow-scroll-y for PageContainer.tsx instead of just overflow-scroll
+* remove bg-red in if (loading) return <div ... in FH_Wrapper.tsx
+* make title 3xl
+* remove bg and text in Pagecontainer (since it is already in tailwind)
+* LOGIN TO CREATE AUTOMATICALLY IF NOT YET CREATED (See Bataan Mushroom)
+* border-red change all to border-red-500
+* Add useRegister: boolean
+* Add custom folder with _temp in Firebase Functions custom folder (see pest control)
+* Add setDoc/updateDoc/getDoc in Firebase Functions (see pest control)
+* Add DateTime class in Firebase Functions (see pest control)
+* Add FHPicture delete && FHPictures in FHT.ts (see Cielo app)
+* Add overlay in PageWrapper and Overlay.tsx (see Cielo app)
+* Add modified FH && FHT for batches (see Cielo app)
+* update FHT.ts and useFHWatch.ts
+* Add useFHWatchQuery to template
+* jso to outfit -> MyModal & MyButton
+* Add clear() in Inputfield (see Cielo app)
+* Add empty custom folder in components
+* Update screenshot link to https://github.com/Manila-Arduino/{repo_name}/blob/main/public/images/screenshot.png
+* privacy - update https://www.termsandconditionsgenerator.com/live.php?token=G8aMDV0PD8lLHWKS8I1KJmtSD5TBulEi
+* add disabled in myInput (implemented in sidbot)
+* add chevron left
+* add date modal to template
+* add useAddress in template
+* copy colors from tailwind to style
+* add right triangle sa template
+* add beautiful scrollbar sa template
+* layout title
+* remove howmuch in pagewrapper.tsx
+* remove constants
+* move Token.ts to templates in classes folder
+* descriptions in (1) Constants, (2) manifest.json, (3) README.md
+* add autoformat in new generated svgs
+* `npm run initialize` first before `npm run import_figma`
+* Edit classes/templates/AdminSettings: remove customer_service_phone
+* Edit classes/Device: retain only id
+* myFetch fix method (from River Generator copy whole file)
+* make theme in manifest.json same as background of icon
+* remove storage / functions in firebase.json if not used

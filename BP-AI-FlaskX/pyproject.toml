@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flaskx"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "firebase-admin>=7.1.0",
+    "flask>=3.1.2",
+    "flask-socketio>=5.5.1",
+    "inquirerpy>=0.3.4",
+    "openai>=1.108.0",
+    "opencv-python>=4.12.0.88",
+    "playwright>=1.55.0",
+    "pydantic>=2.11.9",
+    "pyserial>=3.5",
+    "python-dotenv>=1.1.1",
+    "pywinusb>=0.4.2",
+    "rich>=14.1.0",
+    "scikit-image>=0.25.2",
+    "yagmail>=0.15.293",
+]

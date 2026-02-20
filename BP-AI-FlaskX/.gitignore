@@ -137,6 +137,9 @@ venv.bak/
 .spyderproject
 .spyproject
 
+# simulation output PDF (disconnect for deployment)
+output.pdf
+
 # Rope project settings
 .ropeproject
 

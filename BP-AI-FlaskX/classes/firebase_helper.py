@@ -30,11 +30,24 @@ class Firebase:
     ): # Upload file to Firebase Storage
         bucket = storage.bucket() # Get storage bucket
         blob = bucket.blob(destination_blob_name) # Create blob object
-        blob.upload_from_filename(file_path)
+        
+        # Set content type for better browser viewing
+        content_type = None
+        if file_path.lower().endswith(".pdf"):
+            content_type = "application/pdf"
+        elif file_path.lower().endswith(".jpg") or file_path.lower().endswith(".jpeg"):
+            content_type = "image/jpeg"
+        elif file_path.lower().endswith(".png"):
+            content_type = "image/png"
+            
+        blob.upload_from_filename(file_path, content_type=content_type)
         if make_public:
             blob.make_public()
 
-        return blob.public_url
+        # Return Firebase Storage media URL for better compatibility with iframes
+        from urllib.parse import quote
+        encoded_name = quote(destination_blob_name, safe='')
+        return f"https://firebasestorage.googleapis.com/v0/b/{bucket.name}/o/{encoded_name}?alt=media"
 
     #! FIRESTORE
     def read_firestore(self, doc_path: str, data_type: Type[T]) -> T: # Read document from Firestore

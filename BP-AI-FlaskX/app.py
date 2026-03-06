@@ -12,6 +12,7 @@ from classes.PDFGen import PDFGen # PDF generation class
 from classes.Yagmail import YaGmail # Email sending class
 from classes.firebase_helper import Firebase # Firebase helper class
 from classes.Arduino import Arduino # Arduino communication class
+from classes.LocalDB import LocalDB # Local SQLite backup class
 from templates.app_wrapper import * # Import Flask app and socketio
 
 load_dotenv()
@@ -22,6 +23,7 @@ firebase = Firebase(
     use_storage=True,  # Enable Storage
     storage_bucket="bp-ai-web.firebasestorage.app",  # Specify storage bucket
 )
+local_db = LocalDB() # Initialize local SQLite backup
 contec_device = Contec_CMS60D() # Initialize Contec device
 arduino = Arduino(os.getenv("ARDUINO_PORT", "COM5")) # Initialize Arduino on configured port
 
@@ -151,6 +153,8 @@ def chatgpt_quick():
         result=url,
     )
     firebase.write_firestore(f"patient/{patient_id}/record/{storage_filename}", record)
+    #! SAVE TO LOCAL DB (RECORD)
+    local_db.save_record(patient_id, storage_filename, record.model_dump())
 
     #! SAVE TO USER FIRESTORE (LOG DEVICE)
     log_device_id = f"{storage_filename}_{patient_id}"
@@ -174,6 +178,8 @@ def chatgpt_quick():
         bp_dia=bp_dia,
     )
     firebase.write_firestore(f"log_device/{log_device_id}", log_device)
+    #! SAVE TO LOCAL DB (LOG DEVICE)
+    local_db.save_log_device(log_device_id, log_device.model_dump())
 
     return {"url": url, "id": storage_filename}
 
@@ -245,6 +251,8 @@ def chatgpt_full():
         result=url,
     )
     firebase.write_firestore(f"patient/{patient_id}/record/{storage_filename}", record)
+    #! SAVE TO LOCAL DB (RECORD)
+    local_db.save_record(patient_id, storage_filename, record.model_dump())
 
     #! SAVE TO USER FIRESTORE (LOG DEVICE)
     log_device_id = f"{storage_filename}_{patient_id}"
@@ -268,6 +276,8 @@ def chatgpt_full():
         bp_dia=bp_dia,
     )
     firebase.write_firestore(f"log_device/{log_device_id}", log_device)
+    #! SAVE TO LOCAL DB (LOG DEVICE)
+    local_db.save_log_device(log_device_id, log_device.model_dump())
 
     #! SEND TO EMAIL
     YaGmail(

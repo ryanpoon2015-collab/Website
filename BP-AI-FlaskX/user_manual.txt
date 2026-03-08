@@ -32,12 +32,47 @@ To start using the system:
 Inside the application, you can check the status of your devices. The `/device_status` endpoint (or the status panel on the dashboard) provides real-time feedback:
 *   **Good Condition**: The device is properly connected, recognized by the system, and ready for measurement.
 *   **Disconnected/Error**: The system cannot communicate with the device.
-    *   *Troubleshooting*: Check USB cables, ensure drivers are installed, and restart the application if necessary.
-*   **Overall status**:
-    *   **Ready**: All sensors are operational.
-    *   **Check Connections**: One or more sensors are offline.
 
-## 5. Report Generation
+### Failure Notifications
+The system provides explicit notifications when a measurement fails:
+*   **"Arduino not available"**: Triggered when the system cannot receive data from the temperature or BP sensors via the Arduino.
+*   **"No valid data available"**: Triggered if the Contec CMS60D is disconnected during a reading or providing invalid pulse/SpO2 values.
+*   **"Didn't receive any reply from Arduino"**: Specific to the Blood Pressure measurement start/stop command.
+
+## 5. Health Status Descriptions
+The system analyzes your readings and provides a "Status" description for each parameter:
+
+### Temperature
+*   **Hypothermia**: < 35.0°C
+*   **Normal**: 35.0°C - 37.2°C
+*   **Fever**: 37.3°C - 38.4°C
+*   **High Fever**: ≥ 38.5°C
+
+### Blood Pressure (BP)
+*   **Normal**: < 120 (SYS) and < 80 (DIA)
+*   **Elevated**: 120-129 (SYS) and < 80 (DIA)
+*   **Hypertension Stage 1**: 130-139 (SYS) or 80-89 (DIA)
+*   **Hypertension Stage 2**: 140-179 (SYS) or 90-119 (DIA)
+*   **Hypertensive Crisis**: ≥ 180 (SYS) or ≥ 120 (DIA)
+
+### SpO2 (Oxygen Level)
+*   **Normal**: ≥ 95%
+*   **Low Oxygen**: 90% - 94%
+*   **Critical**: < 90%
+
+### Heart Rate (Pulse)
+*   **Bradycardia**: < 60 BPM
+*   **Normal**: 60 - 100 BPM
+*   **Tachycardia**: > 100 BPM
+
+## 6. Troubleshooting
+If you encounter a "Disconnected/Error" status or a failure notification:
+1.  **Check Physical Connections**: Ensure USB cables are securely plugged in.
+2.  **Verify COM Ports**: Check the Windows Device Manager to ensure the Arduino is assigned to the correct port (default is `COM5`).
+3.  **Run as Administrator**: Some HID devices (like the Contec oximeter) require administrative privileges to access.
+4.  **Restart the App**: If a device was plugged in AFTER the app started, refreshing or restarting may be required.
+
+## 6. Report Generation
 After all measurements are taken:
 1.  Enter patient details (name, symptoms, etc.).
 2.  Click "Generate Report".

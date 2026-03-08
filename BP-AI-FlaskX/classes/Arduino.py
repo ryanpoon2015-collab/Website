@@ -10,10 +10,15 @@ class Arduino:
     def __post_init__(self):
         self.use_arduino = self.port != ""
         if self.use_arduino:
-            self.ser = serial.Serial(self.port, self.baudrate, timeout=1) # Initialize serial connection
+            try:
+                self.ser = serial.Serial(self.port, self.baudrate, timeout=1) # Initialize serial connection
+            except Exception as e:
+                print(f"Arduino Connection Error on {self.port}: {e}")
+                self.ser = None
+                self.use_arduino = False # Disable if it failed to open
 
     def is_connected(self):
-        if not self.use_arduino:
+        if not hasattr(self, 'ser') or self.ser is None:
             return False
         try:
             return self.ser.is_open

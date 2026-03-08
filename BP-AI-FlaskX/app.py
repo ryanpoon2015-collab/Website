@@ -302,13 +302,19 @@ def measure_temperature():
     if not arduino.available():
         raise ValueError("Arduino not available")
 
-    temperature = float(arduino.read())
-    if temperature < 36.1:
-        return round(random.uniform(36.1, 37.0), 1)
-    elif temperature > 40.0:
-        return round(random.uniform(38.5, 40.0), 1)
+    def get_temp_status(t):
+        if t < 35.0: return "Hypothermia"
+        if t <= 37.2: return "Normal"
+        if t <= 38.4: return "Fever"
+        return "High Fever"
 
-    return round(temperature, 1)
+    temp = round(temperature, 1)
+    if temperature < 36.1:
+        temp = round(random.uniform(36.1, 37.0), 1)
+    elif temperature > 40.0:
+        temp = round(random.uniform(38.5, 40.0), 1)
+
+    return {"value": temp, "status": get_temp_status(temp)}
 
 
 @RouteHelper.route("/contec_start", methods=["GET"])
@@ -321,9 +327,25 @@ def contec_start():
 @RouteHelper.route("/contec_read", methods=["GET"])
 def contec_read():
     contec_device = Contec_CMS60D()
+    def get_spo2_status(s):
+        if s >= 95: return "Normal"
+        if s >= 90: return "Low Oxygen"
+        return "Critical"
+
+    def get_pulse_status(p):
+        if p < 60: return "Bradycardia"
+        if p <= 100: return "Normal"
+        return "Tachycardia"
+
     data = contec_device.read()
     if data:
-        return {"pulse_rate": data[0], "spo2": data[1]}
+        pr, spo2 = data
+        return {
+            "pulse_rate": pr, 
+            "pulse_status": get_pulse_status(pr),
+            "spo2": spo2,
+            "spo2_status": get_spo2_status(spo2)
+        }
     raise ValueError("No valid data available")
 
 
@@ -392,12 +414,23 @@ def bp_read():
     #     return {"bp_sys": int(reply.split(",")[0]), "bp_dia": int(reply.split(",")[1])}
     # raise ValueError("No valid data available")
 
+    def get_bp_status(sys, dia):
+        if sys < 120 and dia < 80: return "Normal"
+        if sys < 130 and dia < 80: return "Elevated"
+        if sys < 140 or dia < 90: return "Hypertension Stage 1"
+        if sys < 180 or dia < 120: return "Hypertension Stage 2"
+        return "Hypertensive Crisis"
+
     sys, dia = bp_picture.read()
 
     if sys == 0 or dia == 0:
         raise ValueError("No valid data available")
 
-    return {"bp_sys": sys, "bp_dia": dia}
+    return {
+        "bp_sys": sys, 
+        "bp_dia": dia, 
+        "status": get_bp_status(sys, dia)
+    }
 
 
 @RouteHelper.route("/device_status", methods=["GET"])

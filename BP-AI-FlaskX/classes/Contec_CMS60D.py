@@ -25,7 +25,11 @@ class Contec_CMS60D:
         self.buf = deque()
         self.myData = MyData()
         self.myData = MyData()
-        self._open_iface()
+        try:
+            self._open_iface()
+        except Exception as e:
+            print(f"Contec_CMS60D Startup Connection Error: {e}")
+            self.dev = None
 
     def _hex2list(self, s):
         return [int(x, 16) for x in s.split()] if s else []

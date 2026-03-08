@@ -400,6 +400,21 @@ def bp_read():
     return {"bp_sys": sys, "bp_dia": dia}
 
 
+@RouteHelper.route("/device_status", methods=["GET"])
+def device_status():
+    """
+    Returns the connection status of all peripherals.
+    """
+    arduino_status = "Good Condition" if arduino.is_connected() else "Disconnected/Error"
+    contec_status = "Good Condition" if contec_device.is_connected() else "Disconnected/Error"
+    
+    return {
+        "arduino": arduino_status,
+        "contec": contec_status,
+        "overall": "Ready" if arduino.is_connected() and contec_device.is_connected() else "Check Connections"
+    }
+
+
 @RouteHelper.route("/fingerprint_read", methods=["GET"])
 def fingerprint_read():
 

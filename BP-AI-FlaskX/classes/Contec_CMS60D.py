@@ -50,6 +50,14 @@ class Contec_CMS60D:
             "CMS60D HID interface with OUT+IN not found. Close SpO2 Assistant; run as Admin."
         )
 
+    def is_connected(self):
+        try:
+            self._open_iface()
+            return self.dev is not None
+        except Exception as e:
+            print(f"CMS60D Connection Check Error: {e}")
+            return False
+
     def _open_iface(self):
 
         # idempotent open; safe to call before every send

@@ -12,6 +12,14 @@ class Arduino:
         if self.use_arduino:
             self.ser = serial.Serial(self.port, self.baudrate, timeout=1) # Initialize serial connection
 
+    def is_connected(self):
+        if not self.use_arduino:
+            return False
+        try:
+            return self.ser.is_open
+        except Exception:
+            return False
+
     def print(self, data: str):
         if self.use_arduino:
             self.ser.write(data.encode()) # Send data to Arduino

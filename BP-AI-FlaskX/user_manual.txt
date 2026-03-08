@@ -1,0 +1,48 @@
+# BP-AI Health Monitoring System - User Manual
+
+## 1. Introduction
+The BP-AI Health Monitoring System is an integrated platform for tracking vital signs, including body temperature, blood pressure, pulse rate, and oxygen saturation (SpO2). It generates comprehensive AI-powered health reports and provides local and cloud backups of your data.
+
+## 2. Getting Started
+To start using the system:
+1.  **Prepare the Devices**: Ensure the Arduino-based sensors (Temperature, Blood Pressure) and the Contec CMS60D Pulse Oximeter are connected to the USB ports of the computer.
+2.  **Launch the Application**: Run the `app.py` script to start the Flask server.
+3.  **Access the Dashboard**: Open your web browser and navigate to the local server address (typically `http://127.0.0.1:5000`).
+
+## 3. Measuring Vitals
+
+### Temperature
+*   Click "Measure Temperature".
+*   The system will trigger the Arduino sensor. 
+*   Wait for approximately 7 seconds for the reading to stabilize and display.
+
+### Blood Pressure
+*   Click "Start BP Measurement".
+*   The cuff will begin to inflate. Ensure you are sitting still and relaxed.
+*   Once finished, the system will capture a picture of the BP monitor and extract the values (Systolic and Diastolic).
+
+### SpO2 and Pulse Rate
+*   Insert your finger into the Contec CMS60D probe.
+*   The device will automatically begin reading. 
+*   The dashboard will update with your oxygen saturation (%) and heart rate (BPM).
+
+## 4. Understanding Notifications and Status
+
+### Device Status Indicator
+Inside the application, you can check the status of your devices. The `/device_status` endpoint (or the status panel on the dashboard) provides real-time feedback:
+*   **Good Condition**: The device is properly connected, recognized by the system, and ready for measurement.
+*   **Disconnected/Error**: The system cannot communicate with the device.
+    *   *Troubleshooting*: Check USB cables, ensure drivers are installed, and restart the application if necessary.
+*   **Overall status**:
+    *   **Ready**: All sensors are operational.
+    *   **Check Connections**: One or more sensors are offline.
+
+## 5. Report Generation
+After all measurements are taken:
+1.  Enter patient details (name, symptoms, etc.).
+2.  Click "Generate Report".
+3.  The system uses AI to analyze your vitals and produce a detailed PDF report.
+4.  Reports are automatically uploaded to Firebase and backed up locally in `local_backup.db`.
+
+## 6. Shutdown
+When finished, use the "/shutdown" option in the application menu to safely power down the computer system.

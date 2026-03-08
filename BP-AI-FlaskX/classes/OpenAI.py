@@ -47,3 +47,9 @@ class OpenAI:
         if parsed is None:
             raise ValueError("Failed to parse response") # Handle parsing failure
         return parsed
+
+    @staticmethod
+    def get_embedding(text: str):
+        client = _OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        text = text.replace("\n", " ")
+        return client.embeddings.create(input=[text], model="text-embedding-3-small").data[0].embedding

@@ -111,13 +111,21 @@ def chatgpt_quick():
     bp_sys = int(data["bp_sys"]) # Get systolic blood pressure from data
     bp_dia = int(data["bp_dia"]) # Get diastolic blood pressure from data
 
+    #! RETRIEVE CONTEXT FROM FAISS
+    from classes.VectorDB import VectorDB
+    vdb = VectorDB()
+    query = f"vitals: SpO2 {spo2}, HR {heart_rate}, Temp {body_temp}, BP {bp_sys}/{bp_dia}. symptoms: {symptoms}"
+    context_matches = vdb.search(query, k=2)
+    retrieved_context = "\n".join([m['text'] for m in context_matches]) if context_matches else "No specific context found."
+
     #! GENERATE PDF
     PDFGen(
+        rf"RAG Knowledge Context: {retrieved_context}\n\n"
         rf"data = {{"
         rf"'height': {height}, # in cm, 'weight': {weight}, # in kg, 'symptoms': {symptoms}, "
         rf"'spo2': {spo2}, 'heart_rate': {heart_rate}, 'body_temp': {body_temp}, "
         rf"'bp_sys': {bp_sys}, 'bp_dia': {bp_dia} }} "
-        rf"Write a 3000-word health report about these info. Write in a way a highschool can understand. "
+        rf"Based on the knowledge context above, write a 3000-word health report about these info. Write in a way a highschool can understand. "
         rf"Make sure it is easily understood even by a stupid person. Spoonfeed the explanation. "
         rf"The results should cite research from credible insititutions like mayo clinic and other "
         rf"reputable health research. Cite in harvard style. Make use of all the data i gave you. "
@@ -210,13 +218,21 @@ def chatgpt_full():
     physician_email = data["physician_email"]
     physician_name = data["physician_name"]
 
+    #! RETRIEVE CONTEXT FROM FAISS
+    from classes.VectorDB import VectorDB
+    vdb = VectorDB()
+    query = f"vitals: SpO2 {spo2}, HR {heart_rate}, Temp {body_temp}, BP {bp_sys}/{bp_dia}. symptoms: {symptoms}"
+    context_matches = vdb.search(query, k=2)
+    retrieved_context = "\n".join([m['text'] for m in context_matches]) if context_matches else "No specific medical context found."
+
     #! GENERATE PDF
     PDFGen(
+        rf"RAG Knowledge Context: {retrieved_context}\n\n"
         rf"data = {{ 'name': {name},'age': {age}, 'sex': {sex}, "
         rf"'height': {height}, # in cm, 'weight': {weight}, # in kg, 'symptoms': {symptoms}, "
         rf"'spo2': {spo2}, 'heart_rate': {heart_rate}, 'body_temp': {body_temp}, "
         rf"'bp_sys': {bp_sys}, 'bp_dia': {bp_dia} }} "
-        rf"Write a 3000-word health report about these info. Write in a way a highschool can understand. "
+        rf"Based on the knowledge context above, write a 3000-word health report about these info. Write in a way a highschool can understand. "
         rf"Make sure it is easily understood even by a stupid person. Spoonfeed the explanation. "
         rf"The results should cite research from credible insititutions like mayo clinic and other "
         rf"reputable health research. Cite in harvard style. Make use of all the data i gave you. "

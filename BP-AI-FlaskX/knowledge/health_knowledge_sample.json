@@ -1,0 +1,26 @@
+[
+    {
+        "text": "Fever in adults is generally considered a temperature of 38°C (100.4°F) or higher. High fever is above 38.5°C. Causes can include infections, inflammation, or heat exhaustion.",
+        "tags": ["temperature", "fever"]
+    },
+    {
+        "text": "Hypothermia occurs when body temperature drops below 35°C (95°F). It is a medical emergency that requires immediate warming and care.",
+        "tags": ["temperature", "hypothermia"]
+    },
+    {
+        "text": "Normal blood pressure is consistently below 120/80 mmHg. Elevated BP is 120-129 systolic and <80 diastolic. Regular exercise and low sodium intake help maintain healthy levels.",
+        "tags": ["blood_pressure", "hypertension"]
+    },
+    {
+        "text": "Oxygen saturation (SpO2) levels between 95% and 100% are considered normal. Levels below 90% are critical (hypoxemia) and may require supplemental oxygen.",
+        "tags": ["spo2", "oxygen"]
+    },
+    {
+        "text": "A normal resting heart rate for adults ranges from 60 to 100 beats per minute. Tachycardia (>100 BPM) can be caused by stress, caffeine, or underlying heart conditions.",
+        "tags": ["heart_rate", "pulse"]
+    },
+    {
+        "text": "Symptoms of respiratory infection include cough, shortness of breath, and low SpO2 levels. If SpO2 is below 92%, consult a physician immediately.",
+        "tags": ["symptoms", "respiratory"]
+    }
+]

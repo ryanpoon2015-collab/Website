@@ -12,3 +12,5 @@ pywinusb>=0.4.2
 rich>=14.1.0
 scikit-image>=0.25.2
 yagmail>=0.15.293
+faiss-cpu>=1.9.0
+numpy>=1.26.0

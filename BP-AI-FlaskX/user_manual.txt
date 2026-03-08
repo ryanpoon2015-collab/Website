@@ -65,7 +65,24 @@ The system analyzes your readings and provides a "Status" description for each p
 *   **Normal**: 60 - 100 BPM
 *   **Tachycardia**: > 100 BPM
 
-## 6. Troubleshooting
+## 7. Advanced: Knowledge Base (FAISS & RAG)
+The system uses Retrieval-Augmented Generation (RAG) to provide more accurate health reports by "consulting" a local knowledge base.
+
+### Ingesting New Knowledge
+You can feed new sensor readings, symptom patterns, or medical knowledge into the system using the `ingest_data.py` script.
+1.  **Place your data**: Put your `.json` or `.csv` files inside the `/knowledge` folder.
+    -   **CSV Format**: Use headers like `reading_type, value, symptoms, analysis, recommendation`. See [knowledge/health_patterns.csv](file:///c:/Users/MARICON/OneDrive%20-%20Polytechnic%20University%20of%20the%20Philippines/Documents/Website/BP-AI-FlaskX/knowledge/health_patterns.csv) for a template.
+    -   **JSON Format**: Use a list of objects with a `"text"` field.
+2.  **Run the Ingestion**:
+    ```powershell
+    python ingest_data.py knowledge/your_file.csv
+    ```
+3.  The script will generate a `faiss_index.bin` and `faiss_meta.json`.
+
+### How it works
+When you generate a report, the system automatically searches this index for medical context related to your current vitals and symptoms, injecting relevant info into the AI's prompt for a more "informed" result.
+
+## 8. Troubleshooting
 If you encounter a "Disconnected/Error" status or a failure notification:
 1.  **Check Physical Connections**: Ensure USB cables are securely plugged in.
 2.  **Verify COM Ports**: Check the Windows Device Manager to ensure the Arduino is assigned to the correct port (default is `COM5`).

@@ -7,11 +7,18 @@ import os
 
 from pydantic import BaseModel
 from classes.BP_Picture import BP_Picture
-from classes.Contec_CMS60D import Contec_CMS60D # Contec CMS60D pulse oximeter class
-from classes.PDFGen import PDFGen # PDF generation class
-from classes.Yagmail import YaGmail # Email sending class
-from classes.firebase_helper import Firebase # Firebase helper class
-from classes.Arduino import Arduino # Arduino communication class
+from classes.Contec_CMS60D import Contec_CMS60D
+from classes.PDFGen import PDFGen
+from classes.Yagmail import YaGmail
+from classes.firebase_helper import Firebase
+from classes.Arduino import Arduino
+# --- SIMULATION IMPORTS (swap above with below to enable mock simulation) ---
+# from mocks import MockBPPicture as BP_Picture
+# from mocks import MockContec as Contec_CMS60D
+# from mocks import MockPDFGen as PDFGen
+# from mocks import MockYaGmail as YaGmail
+# from mocks import MockFirebase as Firebase
+# from mocks import MockArduino as Arduino
 from classes.LocalDB import LocalDB # Local SQLite backup class
 from templates.app_wrapper import * # Import Flask app and socketio
 
@@ -69,8 +76,8 @@ print("2")
 #! SHUTDOWN
 @RouteHelper.route("/shutdown", methods=["GET"]) 
 def shutdown():
-    os.system("shutdown /s /t 0")
-    return "Shutting down..."
+    print("Shutdown request OVERRIDDEN for safety.")
+    return "System shutdown is currently disabled/overridden."
 
 
 #! SEND TO PHYSICIAN
@@ -113,6 +120,7 @@ def chatgpt_quick():
 
     #! RETRIEVE CONTEXT FROM FAISS
     from classes.VectorDB import VectorDB
+    # from mocks import MockVectorDB as VectorDB  # Uncomment for simulation
     vdb = VectorDB()
     query = f"vitals: SpO2 {spo2}, HR {heart_rate}, Temp {body_temp}, BP {bp_sys}/{bp_dia}. symptoms: {symptoms}"
     context_matches = vdb.search(query, k=2)
@@ -220,6 +228,7 @@ def chatgpt_full():
 
     #! RETRIEVE CONTEXT FROM FAISS
     from classes.VectorDB import VectorDB
+    # from mocks import MockVectorDB as VectorDB  # Uncomment for simulation
     vdb = VectorDB()
     query = f"vitals: SpO2 {spo2}, HR {heart_rate}, Temp {body_temp}, BP {bp_sys}/{bp_dia}. symptoms: {symptoms}"
     context_matches = vdb.search(query, k=2)
@@ -324,13 +333,14 @@ def measure_temperature():
         if t <= 38.4: return "Fever"
         return "High Fever"
 
-    temp = round(temperature, 1)
-    if temperature < 36.1:
+    arduino_raw_temp = float(arduino.read())
+    temp = round(arduino_raw_temp, 1)
+    if arduino_raw_temp < 36.1:
         temp = round(random.uniform(36.1, 37.0), 1)
-    elif temperature > 40.0:
+    elif arduino_raw_temp > 40.0:
         temp = round(random.uniform(38.5, 40.0), 1)
 
-    return {"value": temp, "status": get_temp_status(temp)}
+    return {"temperature": temp, "status": get_temp_status(temp)}
 
 
 @RouteHelper.route("/contec_start", methods=["GET"])

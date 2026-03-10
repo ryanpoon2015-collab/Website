@@ -15,10 +15,7 @@ class RouteHelper:
                 try:
                     return {"data": func(*args, **kwargs), "error": ""}, 200
                 except Exception as e: # Handle exceptions
-                    print(
-                        f"An exception occurred in {func.__name__}: {str(e)}",
-                        file=sys.stderr,  # Print error to stderr
-                    )
+                    P(f"An exception occurred in {func.__name__}: {str(e)}", "r")
                     return {"data": [], "error": str(e)}, 200 # Return error response
 
             wrapper.__name__ = func.__name__

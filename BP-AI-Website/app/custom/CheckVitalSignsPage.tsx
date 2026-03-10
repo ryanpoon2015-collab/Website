@@ -111,6 +111,12 @@ const CheckVitalSignsPage: React.FC<CheckVitalSignsPageProps> = ({ }) => {
   const [selectedVital, setSelectedVital] = useS<string | null>(null);
   const [manualInputValue, setManualInputValue] = useS("");
 
+  // New State for Status displays
+  const [tempStatus, setTempStatus] = useS<string | null>(null);
+  const [heartRateStatus, setHeartRateStatus] = useS<string | null>(null);
+  const [spo2Status, setSpo2Status] = useS<string | null>(null);
+  const [bpStatus, setBpStatus] = useS<string | null>(null);
+
   // Initialize with 0 instead of Date.now() to prevent Hydration Error
   const [startedMeasuringBP, setStartedMeasuringBP] = useS(0);
 
@@ -131,6 +137,31 @@ const CheckVitalSignsPage: React.FC<CheckVitalSignsPageProps> = ({ }) => {
   // --- NEW HANDLERS FOR EDIT/RETEST ---
 
   // 1. Called when clicking an existing GrayIcon
+  // Helper functions to compute statuses from raw values (mirrors backend logic)
+  const getTempStatus = (t: number) => {
+    if (t < 35.0) return "Hypothermia";
+    if (t <= 37.2) return "Normal";
+    if (t <= 38.4) return "Fever";
+    return "High Fever";
+  };
+  const getHeartRateStatus = (hr: number) => {
+    if (hr < 60) return "Bradycardia";
+    if (hr <= 100) return "Normal";
+    return "Tachycardia";
+  };
+  const getSpo2Status = (s: number) => {
+    if (s >= 95) return "Normal";
+    if (s >= 90) return "Low Oxygen";
+    return "Critical";
+  };
+  const getBpStatus = (sys: number, dia: number) => {
+    if (sys < 120 && dia < 80) return "Normal";
+    if (sys <= 129 && dia < 80) return "Elevated";
+    if (sys <= 139 || dia <= 89) return "Hypertension Stage 1";
+    return "Hypertension Stage 2";
+  };
+
+  // 1. Called when an existing reading is clicked
   const handleExistingClick = (vitalName: string) => {
     setSelectedVital(vitalName);
     optionsModal.open();
@@ -162,19 +193,28 @@ const CheckVitalSignsPage: React.FC<CheckVitalSignsPageProps> = ({ }) => {
     const val = manualInputValue;
     if (!val) return;
 
-    // Parse and save based on vital type
+    // Parse and save based on vital type & update status
     if (selectedVital === "Temperature") {
-      setTemperature(parseFloat(val));
+      const v = parseFloat(val);
+      setTemperature(v);
+      setTempStatus(`Status: ${getTempStatus(v)}`);
     } else if (selectedVital === "Heart Rate") {
-      setHeartRate(parseInt(val));
+      const v = parseInt(val);
+      setHeartRate(v);
+      setHeartRateStatus(`Status: ${getHeartRateStatus(v)}`);
     } else if (selectedVital === "Oxygen Saturation") {
-      setSpo2(parseInt(val));
+      const v = parseInt(val);
+      setSpo2(v);
+      setSpo2Status(`Status: ${getSpo2Status(v)}`);
     } else if (selectedVital === "Blood Pressure") {
       // Expecting format like "120/80"
       if (val.includes("/")) {
         const [sys, dia] = val.split("/");
-        setBpSys(parseInt(sys));
-        setBpDia(parseInt(dia));
+        const s = parseInt(sys);
+        const d = parseInt(dia);
+        setBpSys(s);
+        setBpDia(d);
+        setBpStatus(`Status: ${getBpStatus(s, d)}`);
       } else {
         notify("Format must be Sys/Dia (e.g. 120/80)");
         return; // Don't close if error
@@ -190,8 +230,8 @@ const CheckVitalSignsPage: React.FC<CheckVitalSignsPageProps> = ({ }) => {
   async function measureTemperature() {
     if (measuring) return;
     setMeasuring(true);
-    const res = await myFetch<number>(
-      "http://localhost:5000/measure_temperature",
+    const res = await myFetch<{ temperature: number; status: string }>(
+      "http://127.0.0.1:5000/measure_temperature",
       "GET",
       {},
       {},
@@ -201,7 +241,8 @@ const CheckVitalSignsPage: React.FC<CheckVitalSignsPageProps> = ({ }) => {
     setMeasuring(false);
     console.log(res);
     if (!res.error && res.data) {
-      setTemperature(res.data);
+      setTemperature(res.data.temperature);
+      if (res.data.status) setTempStatus(`Status: ${res.data.status}`);
     } else {
       notify(res.error);
     }
@@ -213,7 +254,7 @@ const CheckVitalSignsPage: React.FC<CheckVitalSignsPageProps> = ({ }) => {
     if (measuring) return;
     setMeasuring(true);
     const res = await myFetch<number>(
-      "http://localhost:5000/contec_start",
+      "http://127.0.0.1:5000/contec_start",
       "GET",
       {},
       {},
@@ -233,8 +274,8 @@ const CheckVitalSignsPage: React.FC<CheckVitalSignsPageProps> = ({ }) => {
 
   //! READ CONTEC
   async function readContec() {
-    const res = await myFetch<{ pulse_rate: number; spo2: number }>(
-      "http://localhost:5000/contec_read",
+    const res = await myFetch<{ pulse_rate: number; pulse_status: string; spo2: number; spo2_status: string }>(
+      "http://127.0.0.1:5000/contec_read",
       "GET",
       {},
       {},
@@ -245,6 +286,8 @@ const CheckVitalSignsPage: React.FC<CheckVitalSignsPageProps> = ({ }) => {
     if (!res.error && res.data) {
       setSpo2(res.data.spo2);
       setHeartRate(res.data.pulse_rate);
+      if (res.data.pulse_status) setHeartRateStatus(`Status: ${res.data.pulse_status}`);
+      if (res.data.spo2_status) setSpo2Status(`Status: ${res.data.spo2_status}`);
       clearTick();
       setMeasuring(false);
       spo2Modal.close();
@@ -258,7 +301,7 @@ const CheckVitalSignsPage: React.FC<CheckVitalSignsPageProps> = ({ }) => {
     if (measuring) return;
     setMeasuring(true);
     const res = await myFetch<number>(
-      "http://localhost:5000/bp_start",
+      "http://127.0.0.1:5000/bp_start",
       "GET",
       {},
       {},
@@ -287,7 +330,7 @@ const CheckVitalSignsPage: React.FC<CheckVitalSignsPageProps> = ({ }) => {
     setMeasuring(false);
     bpModal.close();
     const res2 = await myFetch(
-      "http://localhost:5000/bp_stop",
+      "http://127.0.0.1:5000/bp_stop",
       "GET",
       {},
       {},
@@ -303,12 +346,12 @@ const CheckVitalSignsPage: React.FC<CheckVitalSignsPageProps> = ({ }) => {
   //! READ BP
   async function readBP() {
     const elapsed = Date.now() - startedRef.current;
-    if (elapsed < 30_000) {
-      console.log("30 seconds have not passed yet.");
+    if (elapsed < 5_000) {
+      console.log("5 seconds have not passed yet.");
       return;
     }
-    if (elapsed >= 65_000) {
-      console.log("65 seconds have passed. Stopping BP.");
+    if (elapsed >= 15_000) {
+      console.log("15 seconds have passed. Stopping BP.");
       await stopBP();
       return;
     }
@@ -316,11 +359,13 @@ const CheckVitalSignsPage: React.FC<CheckVitalSignsPageProps> = ({ }) => {
     const res = await myFetch<{
       bp_sys: number;
       bp_dia: number;
-    }>("http://localhost:5000/bp_read", "GET", {}, {}, "json", "json");
+      status: string;
+    }>("http://127.0.0.1:5000/bp_read", "GET", {}, {}, "json", "json");
     console.log(res);
     if (!res.error && res.data) {
       setBpSys(res.data.bp_sys);
       setBpDia(res.data.bp_dia);
+      if (res.data.status) setBpStatus(`Status: ${res.data.status}`);
       await stopBP();
     } else {
       if (res.error !== "No valid data available") {
@@ -335,10 +380,14 @@ const CheckVitalSignsPage: React.FC<CheckVitalSignsPageProps> = ({ }) => {
   useF(() => {
     // Initialize all values to null on mount
     setTemperature(null);
+    setTempStatus(null);
     setHeartRate(null);
+    setHeartRateStatus(null);
     setSpo2(null);
+    setSpo2Status(null);
     setBpSys(null);
     setBpDia(null);
+    setBpStatus(null);
     return () => {
       clearTick();
       stopBP();

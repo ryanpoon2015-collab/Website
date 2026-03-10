@@ -30,7 +30,7 @@ const MainPage: React.FC<MainPageProps> = ({}) => {
     if (shuttingDown) return;
     setShuttingDown(true);
     const res = await myFetch<string>(
-      "http://localhost:5000/shutdown",
+      "http://127.0.0.1:5000/shutdown",
       "GET",
       {},
       {},

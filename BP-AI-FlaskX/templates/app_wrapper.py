@@ -10,11 +10,14 @@ from classes.p import P # Import custom print/logging function
 log = logging.getLogger("werkzeug") # Get the werkzeug logger
 log.setLevel(logging.ERROR)
 
+from flask_cors import CORS
+
 app: Optional[Flask] = None # Initialize Flask app variable
 socketio: Optional[SocketIO] = None
 
 #! INITIALIZE
 app = Flask(__name__)
+CORS(app) # Enable CORS for all routes and origins
 app.config["CORS_HEADERS"] = "Content-Type" # Set CORS headers
 
 #! SOCKET IO

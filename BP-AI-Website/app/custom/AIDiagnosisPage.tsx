@@ -119,7 +119,7 @@ const AIDiagnosisPage: React.FC<AIDiagnosisPageProps> = ({ }) => {
     generatingModal.open();
     setGeneratingResults(true);
     const res = await myFetch<{ url: string; id: string }>(
-      `http://localhost:5000/${isQuickHealth ? "chatgpt_quick" : "chatgpt_full"}`,
+      `http://127.0.0.1:5000/${isQuickHealth ? "chatgpt_quick" : "chatgpt_full"}`,
       "POST",
       {},
       isQuickHealth
@@ -177,7 +177,7 @@ const AIDiagnosisPage: React.FC<AIDiagnosisPageProps> = ({ }) => {
     if (sendingToPhysician || !reportUrl) return;
     setSendingToPhysician(true);
     const res = await myFetch<string>(
-      "http://localhost:5000/send_to_physician",
+      "http://127.0.0.1:5000/send_to_physician",
       "POST",
       {},
       {

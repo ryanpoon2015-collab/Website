@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 
 interface GrayIconProps {
   text: string;
+  subText?: string;
   onClick?: MouseEventHandler<SVGSVGElement>;
   size?: number;
   nonBouncing?: boolean;
@@ -11,6 +12,7 @@ interface GrayIconProps {
 
 const GrayIcon: React.FC<GrayIconProps> = ({
   text,
+  subText,
   onClick,
   size = 300,
   nonBouncing = false,
@@ -121,9 +123,16 @@ const GrayIcon: React.FC<GrayIconProps> = ({
           </g>
         </g>
       </MotionSvg>
-      <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 t86c o-75">
-        {text}
-      </p>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-full text-center flex flex-col items-center justify-center -translate-y-[45%]">
+        <p className="t86c o-75 whitespace-nowrap">
+          {text}
+        </p>
+        {subText && (
+          <p className="text-xs t86c o-75 opacity-70 mt-1 leading-normal px-2">
+            {subText}
+          </p>
+        )}
+      </div>
     </div>
   );
 };

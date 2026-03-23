@@ -21,7 +21,7 @@ const DatabaseAccessPage: React.FC<DatabaseAccessPageProps> = ({}) => {
   //! REQUEST ACCESS
   async function requestAccess() {
     const res = await myFetch<boolean>(
-      "http://localhost:5000/fingerprint_read",
+      "http://127.0.0.1:5000/fingerprint_read",
       "GET",
       {},
       {},
